@@ -60,7 +60,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let material = SCNMaterial()
         material.diffuse.contents = UIColor.red
         
-        let dot = SCNSphere(radius: 0.005)
+        let dot = SCNSphere(radius: 0.0025)
         dot.materials = [material]
         
         dotNode.geometry = dot
@@ -82,6 +82,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             pow(end.position.y - start.position.y, 2) +
             pow(end.position.z - start.position.z, 2)
         )
-        print(abs(distance))
+        
+        updateText(text: "\(abs(distance) * 100) cm", at: end.position)
+    }
+    
+    func updateText(text: String, at position: SCNVector3) {
+        let textGeometry = SCNText(string: text, extrusionDepth: 1.0)
+        textGeometry.firstMaterial?.diffuse.contents = UIColor.red
+        
+        let textNode = SCNNode(geometry: textGeometry)
+        textNode.position = SCNVector3(position.x / 2, position.y + 0.005, position.z - 0.1)
+        textNode.scale = SCNVector3(0.005, 0.005, 0.005)
+        
+        sceneView.scene.rootNode.addChildNode(textNode)
     }
 }
